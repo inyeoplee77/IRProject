@@ -1,0 +1,104 @@
+$,DataFrame-method      Select
+Column-class            S4 class that represents a DataFrame column
+DataFrame-class         S4 class that represents a DataFrame
+GroupedData-class       S4 class that represents a GroupedData
+agg                     Count
+arrange,DataFrame,characterOrColumn-method
+                        Arrange
+cache,DataFrame-method
+                        Cache
+cacheTable              Cache Table
+clearCache              Clear Cache
+collect,DataFrame-method
+                        Collects all the elements of a Spark DataFrame
+                        and coerces them into an R data.frame.
+columns,DataFrame-method
+                        Column names
+count,DataFrame-method
+                        Count
+createDataFrame         Create a DataFrame from an RDD
+createExternalTable     Create an external table
+describe,DataFrame,character-method
+                        describe
+distinct,DataFrame-method
+                        Distinct
+dropTempTable           Drop Temporary Table
+dropna,DataFrame-method
+                        dropna
+dtypes,DataFrame-method
+                        DataTypes
+except,DataFrame,DataFrame-method
+                        except
+explain,DataFrame-method
+                        Explain
+filter,DataFrame,characterOrColumn-method
+                        Filter
+first,DataFrame-method
+                        Return the first row of a DataFrame
+groupBy,DataFrame-method
+                        GroupBy
+hashCode                Compute the hashCode of an object
+head,DataFrame-method   Head
+infer_type              infer the SQL type
+insertInto,DataFrame,character-method
+                        insertInto
+intersect,DataFrame,DataFrame-method
+                        Intersect
+isLocal,DataFrame-method
+                        isLocal
+join,DataFrame,DataFrame-method
+                        Join
+jsonFile                Create a DataFrame from a JSON file.
+limit,DataFrame,numeric-method
+                        Limit
+parquetFile             Create a DataFrame from a Parquet file.
+persist,DataFrame,character-method
+                        Persist
+print.jobj              Print a JVM object reference.
+print.structField       Print a Spark StructField.
+print.structType        Print a Spark StructType.
+printSchema,DataFrame-method
+                        Print Schema of a DataFrame
+read.df                 Load an DataFrame
+registerTempTable,DataFrame,character-method
+                        Register Temporary Table
+repartition,DataFrame,numeric-method
+                        Repartition
+sample,DataFrame,logical,numeric-method
+                        Sample
+saveAsParquetFile,DataFrame,character-method
+                        saveAsParquetFile
+saveAsTable,DataFrame,character,character,character-method
+                        saveAsTable
+schema,DataFrame-method
+                        Get schema object
+selectExpr,DataFrame,character-method
+                        SelectExpr
+show,DataFrame-method   show
+showDF,DataFrame-method
+                        showDF
+sparkR.init             Initialize a new Spark Context.
+sparkR.stop             Stop the Spark context.
+sparkRHive.init         Initialize a new HiveContext.
+sparkRSQL.init          Initialize a new SQLContext.
+sql                     SQL Query
+structField             structField
+structType              structType
+table                   Create a DataFrame from a SparkSQL Table
+tableNames              Table Names
+tables                  Tables
+take,DataFrame,numeric-method
+                        Take the first NUM rows of a DataFrame and
+                        return a the results as a data.frame
+uncacheTable            Uncache Table
+unionAll,DataFrame,DataFrame-method
+                        UnionAll
+unpersist,DataFrame-method
+                        Unpersist
+withColumn,DataFrame,character,Column-method
+                        WithColumn
+withColumnRenamed,DataFrame,character,character-method
+                        WithColumnRenamed
+write.df,DataFrame,character-method
+                        Save the contents of the DataFrame to a data
+                        source
