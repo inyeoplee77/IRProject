@@ -4,12 +4,8 @@ from pyspark import SparkContext
 from pyspark.sql import SQLContext
 sc = SparkContext()
 sqlContext = SQLContext(sc)
-
-# A JSON dataset is pointed to by path.
-# The path can be either a single text file or a directory storing text files.
 crawl = sc.pickleFile('merged_file')
-#crawl = sqlContext.read.json("all_data/*")#.select('eval_content','professor','lec_name','lec_code').map(lambda x : [x.eval_content,x.professor,x.lec_name,x.lec_code])
-
+'''
 f = open('json_parsed.txt','w')
 kkma = Kkma()
 for data in crawl.collect():
@@ -32,4 +28,4 @@ for data in crawl.collect():
 		f.write(pos[1].encode('utf-8'))
 		f.write(' ')
 	f.write('\n')
-
+'''
