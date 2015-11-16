@@ -4,26 +4,27 @@ from pyspark import SparkContext
 from pyspark.sql import SQLContext
 sc = SparkContext()
 kkma = Kkma()
-wordbag = []
+
 
 def create_wordbag(x):
 	if(x['eval_content']) is None:
 		return
-	
+	wordbag = []
 	for text in kkma.pos(x['eval_content']):
 		tag = text[1]
 		if ('JK' or 'JX' or 'JC' or 'EP' or 'EF' or 'EC' or 'ET' or 'XP' or 'XS' or 'SF' or 'SP' or 'SS' or 'SE' or 'SO' or 'SW' or 'OH' or 'OL') in tag:
 			continue
 		
 		word = text[0]
-		if word in wordbag:
-			return
+		#if word in wordbag:
+		#	return
 		wordbag.append(word)
-return wordbag
+		print word
+	return wordbag
 
-words = sc.pickleFile('merged_file').map(lambda x : create_wordbag)
+words = sc.pickleFile('IRProject/merged_file').flatMap(lambda x : create_wordbag)
 
-for data in words.collect():
+for data in words.take(10):
 	print data
 	
 		
