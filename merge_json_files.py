@@ -40,10 +40,12 @@ for f in read_files:
 from pyspark import SparkContext
 import pickle
 
+
+'''
 sc = SparkContext()
 rdd = sc.parallelize(data)
 rdd.saveAsPickleFile('merged_file')
-
+'''
 '''
 with open("merged_file.json", "wb") as outfile:
 	outfile.write('[{}]'.format(','.join([open(f, "rb").read() for f in read_files])))
