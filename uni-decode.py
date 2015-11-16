@@ -3,13 +3,14 @@ from konlpy.tag import Kkma
 from pyspark import SparkContext
 from pyspark.sql import SQLContext
 sc = SparkContext()
-kkma = Kkma()
+#kkma = Kkma()
 
 
 def create_wordbag(x):
-	if(x['eval_content']) is None:
-		return
 	wordbag = []
+	if(x['eval_content']) is None:
+		return wordbag
+	kkma = Kkma()
 	for text in kkma.pos(x['eval_content']):
 		tag = text[1]
 		if ('JK' or 'JX' or 'JC' or 'EP' or 'EF' or 'EC' or 'ET' or 'XP' or 'XS' or 'SF' or 'SP' or 'SS' or 'SE' or 'SO' or 'SW' or 'OH' or 'OL') in tag:
@@ -19,10 +20,10 @@ def create_wordbag(x):
 		#if word in wordbag:
 		#	return
 		wordbag.append(word)
-		print word
+		#print word
 	return wordbag
 
-words = sc.pickleFile('IRProject/merged_file').flatMap(lambda x : create_wordbag)
+words = sc.pickleFile('IRProject/merged_file').flatMap(lambda x : create_wordbag(x)).distinct()
 
 for data in words.take(10):
 	print data
