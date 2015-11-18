@@ -5,18 +5,18 @@ import jpype
 import os
 
 twitter = Twitter()
-f = open('pickle','rb')
+f = open('pickle.pickle','rb')
 data = pickle.load(f)
 
 wordbag = []
 for datum in data:
-	pos = twitter.pos(datum['eval_content'])
+	pos = twitter.pos(datum['eval_content'],stem = True)
 	for p in pos:
 		tag = p[1]
-		if ('JK' or 'JX' or 'JC' or 'EP' or 'EF' or 'EC' or 'ET' or 'XP' or 'XS' or 'SF' or 'SP' or 'SS' or 'SE' or 'SO' or 'SW' or 'OH' or 'OL') in tag:
+		if ('Exclamation' or 'Josa' or 'Eomi' or 'Suffix' or 'Punctuation' or 'Foreign' or 'Alpha' or 'Unknown' or 'KoreanParticle' or 'Hashtag' or 'ScreenName') in tag:
 			continue
 		word = p[0]
 		wordbag.append(word)
-with open('word_bag_pickle','wb') as f:
+with open('word_bag_pickle.pickle','wb') as f:
 	pickle.dump(wordbag,f)
 
