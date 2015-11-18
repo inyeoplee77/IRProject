@@ -6,6 +6,9 @@
 .classpath
 .sass-cache/
 
+# ignore python pickle files. the size is too big for github
+*.pickle
+
 # OS generated files #
 ######################
 */.DS_Store
