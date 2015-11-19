@@ -5,9 +5,10 @@ import jpype
 import os
 
 twitter = Twitter()
-f = open('pickle.pickle','rb')
-data = pickle.load(f)
-
+#f = open('pickle.pickle','rb')
+#data = pickle.load(f)
+data = []
+data.append({'eval_content':'asdasdasd'})
 wordbag = []
 for datum in data:
 	pos = twitter.pos(datum['eval_content'],stem = True)
