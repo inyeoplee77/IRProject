@@ -3,64 +3,45 @@
 from konlpy.tag import Twitter
 from pyspark import SparkContext
 from pyspark.sql import SQLContext
+from pyspark.mllib.feature import HashingTF
+from pyspark.mllib.feature import IDF
 sc = SparkContext()
 
+unneeded = [u'Unknown', u'KoreanParticle',u'Hashtag', u'ScreenName' ,u'Number', u'Alpha', u'Foreign',u'Punctuation', u'Suffix', u'Eomi', u'PreEomi' ,u'Josa', u'Exclamation']
 
 def create_wordbag(x):
 	wordbag = []
 	if(x['eval_content']) is None:
-		return wordbag
-	'''
-	kkma = Kkma()
-	for text in kkma.pos(x['eval_content']):
-		tag = text[1]
-		if ('JK' or 'JX' or 'JC' or 'EP' or 'EF' or 'EC' or 'ET' or 'XP' or 'XS' or 'SF' or 'SP' or 'SS' or 'SE' or 'SO' or 'SW' or 'OH' or 'OL') in tag:
-			continue
-	'''
+		return wordbag	
 	twitter = Twitter()
 	for text in twitter.pos(x['eval_content'], stem = True):
 		tag = text[1]
-		if(u'Unkown' or u'KoreanParticle' or u'Hashtag' or u'ScreenName' or u'Number' or u'Alpha' or u'Foreign' or u'Punctuation' or u'Suffix' or u'Eomi' or u'PreEomi' or u'Josa' or u'Exclamation') in tag:
+		if tag in unneeded:
 			continue
 
 		word = text[0]
-		#if word in wordbag:
-		#	return
-		wordbag.append((word))
-		#print word
+		wordbag.append(word)
 	return wordbag
+documents = sc.pickleFile('merged_file').map(lambda x : (x['no'],create_wordbag(x)))
+htf = HashingTF()
+tf_id = documents.mapValues(htf.transform)
+tf_id.cache()
+#for a in tf_id.take(100):
+#	print a
+#tf = htf.transform(documents.values())
+#tf.cache()
+idf = IDF().fit(tf_id.values())
+tfidf_id = tf_id.mapValues(idf.transform)
 
-#words = sc.pickleFile('merged_file').flatMap(lambda x : create_wordbag(x)).distinct()
-'''
-for data in words.take(10):
-	print data
-'''
+print type(tfidf_id)
+
+
+for a in tfidf_id.take(10):
+	print a
+
+#for vector in tfidf.take(100):
+#	print vector
 #words.saveAsPickleFile('bag_of_words')
-words = sc.pickleFile('bag_of_words')
-for word in words.take(100):
-	print word.encode('utf-8')
-		
-'''
-f = open('json_parsed.txt','w')
-kkma = Kkma()
-for data in crawl.collect():
-	evaluation = data['eval_content']
-	#print data
-	if evaluation is None:
-		continue
-	#evaluation = evaluation text
-	f.write(data['eval_id'])
-	f.write(' ')
-	f.write(data['professor'].encode('utf-8'))
-	f.write(' ')
-	f.write(data['lec_name'].encode('utf-8'))
-	f.write(' ')
-	f.write(data['lec_code'].encode('utf-8'))
-	f.write(' ')
-	for pos in kkma.pos(evaluation):
-		f.write(pos[0].encode('utf-8'))
-		f.write('/')
-		f.write(pos[1].encode('utf-8'))
-		f.write(' ')
-	f.write('\n')
-'''
+#words = sc.pickleFile('bag_of_words')
+#for word in words.take(100):
+#	print word.encode('utf-8')
