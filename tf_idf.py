@@ -5,6 +5,7 @@ from pyspark.sql import SQLContext
 from pyspark.mllib.feature import HashingTF
 from pyspark.mllib.feature import IDF
 from pyspark.ml.feature import HashingTF, IDF, Tokenizer
+from pyspark.ml.feature import Normalizer
 
 sc = SparkContext()
 sqlContext = SQLContext(sc)
@@ -25,17 +26,21 @@ def create_wordbag(x):
 	return wordbag
 	
 
-documents = sqlContext.createDataFrame(sc.pickleFile('merged_file').map(lambda x : [x['no'],create_wordbag(x),x['professor'],x['lec_code'][:4],x['lec_code'][5],x['eval_total'],x['eval_id']]),['no','words','prof_name','department','grade','eval_total','eval_id'])
+documents = sqlContext.createDataFrame(sc.pickleFile('merged_file/part-00000').map(lambda x : [x['eval_id'],x['no'],create_wordbag(x),x['professor'],x['lec_code'][:4],x['lec_code'][5],x['eval_total'],x['eval_id']]),['eval_id','no','words','prof_name','department','grade','eval_total','eval_id'])
 
-users = sqlContext.createDataFrame(sc.pickleFile('merged_file').map(lambda x : (x['mb_no'],x['lec_code'][:4])),['user','department']).orderBy('department')
-for u in users.select('department','user').take(10000):
-	print u
-'''
+#users = sqlContext.createDataFrame(sc.pickleFile('merged_file').map(lambda x : (x['mb_no'],x['lec_code'][:4])),['user','department']).orderBy('department')
+#for u in users.select('department','user').take(10000):
+#	print u
+
 htf = HashingTF(inputCol= 'words',outputCol = 'rawFeatures')
 featured = htf.transform(documents)
 idf = IDF(inputCol = 'rawFeatures',outputCol = 'idf')
 idfModel = idf.fit(featured)
 tf_idf = idfModel.transform(featured)
-for data in tf_idf.select('no','idf').take(10):
-	print data
-'''
+normalizer = Normalizer(inputCol = 'idf', outputCol = 'idf_norm', p = 2.0)
+normData = normalizer.transform(tf_idf)
+
+
+for Normdata in normData.select('no','idf_norm').take(10):
+	print Normdata
+
