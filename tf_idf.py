@@ -26,6 +26,11 @@ def create_wordbag(x):
 	
 
 documents = sqlContext.createDataFrame(sc.pickleFile('merged_file').map(lambda x : [x['no'],create_wordbag(x),x['professor'],x['lec_code'][:4],x['lec_code'][5],x['eval_total'],x['eval_id']]),['no','words','prof_name','department','grade','eval_total','eval_id'])
+
+users = sqlContext.createDataFrame(sc.pickleFile('merged_file').map(lambda x : (x['mb_no'],x['lec_code'][:4])),['user','department']).orderBy('department')
+for u in users.select('department','user').take(10000):
+	print u
+'''
 htf = HashingTF(inputCol= 'words',outputCol = 'rawFeatures')
 featured = htf.transform(documents)
 idf = IDF(inputCol = 'rawFeatures',outputCol = 'idf')
@@ -33,3 +38,4 @@ idfModel = idf.fit(featured)
 tf_idf = idfModel.transform(featured)
 for data in tf_idf.select('no','idf').take(10):
 	print data
+'''
