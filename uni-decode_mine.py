@@ -2,7 +2,7 @@
 from konlpy.tag import Twitter
 from pyspark import SparkContext
 from pyspark.sql import SQLContext
-
+####
 sc = SparkContext()
 
 unneeded = [u'Unkown', u'KoreanParticle', u'Hashtag', u'ScreenName', u'Number', u'Alpha', u'Foreign', u'Punctuation', u'Suffix', u'Eomi', u'PreEomi', u'Josa', u'Exclamation']
