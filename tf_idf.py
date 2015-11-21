@@ -6,6 +6,9 @@ from pyspark.mllib.feature import HashingTF
 from pyspark.mllib.feature import IDF
 from pyspark.ml.feature import HashingTF, IDF, Tokenizer
 from pyspark.ml.feature import Normalizer
+from pyspark.mllib.clustering import KMeans, KMeansModel
+from numpy import array
+
 
 sc = SparkContext()
 sqlContext = SQLContext(sc)
@@ -32,6 +35,14 @@ documents = sqlContext.createDataFrame(sc.pickleFile('merged_file/part-00000').m
 #for u in users.select('department','user').take(10000):
 #	print u
 
+professors = documents.select('prof_name').distinct()
+department = documents.select('department').distinct()
+#grade	1/2/3/4
+eval_total = documents.select('eval_total').distinct() # 1/2/3/4/5
+
+for e in eval_total.collect():
+	print e
+'''
 htf = HashingTF(inputCol= 'words',outputCol = 'rawFeatures')
 featured = htf.transform(documents)
 idf = IDF(inputCol = 'rawFeatures',outputCol = 'idf')
@@ -39,6 +50,7 @@ idfModel = idf.fit(featured)
 tf_idf = idfModel.transform(featured)
 normalizer = Normalizer(inputCol = 'idf', outputCol = 'idf_norm', p = 2.0)
 normData = normalizer.transform(tf_idf)
+'''
 
 '''
 def dot(x,y):
@@ -49,8 +61,8 @@ def dot(x,y):
 	return score
 '''
 
-
+'''
 cartesian = normData.select('no','idf_norm').rdd.cartesian(normData.select('no','idf_norm').rdd).map(lambda (x,y) :(x.idf_norm.dot(y.idf_norm),(x.no,y.no))).sortByKey().take(100)
 for a in cartesian:
 	print a
-
+'''
