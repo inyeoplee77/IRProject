@@ -23,7 +23,8 @@ def create_wordbag(x):
 		word = text[0]
 		wordbag.append(word)
 	return wordbag
-documents = sqlContext.createDataFrame(sc.pickleFile('merged_file').map(lambda x : (x['no'],create_wordbag(x))),['no','words'])
+
+documents = sqlContext.createDataFrame(sc.pickleFile('merged_file').map(lambda x : (x['no'], create_wordbag(x))),['no','words'])
 htf = HashingTF(inputCol= 'words',outputCol = 'rawFeatures')
 featured = htf.transform(documents)
 idf = IDF(inputCol = 'rawFeatures',outputCol = 'idf')
