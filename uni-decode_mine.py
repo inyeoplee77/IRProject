@@ -41,9 +41,11 @@ terms = sc.pickleFile('merged_file').flatMap(lambda x : create_dictionary(x)).di
 matrix_key = terms.collect()
 if len(matrix_key) % 2:
 	matrix_key.append("")
-#matrix = dict(zip(*[iter(matrix_key)]*2)
-matrix = dict((k, "") for k in matrix_key)
-print matrix
+
+matrix = dict((k, []) for k in matrix_key)
+
+
+
 '''
 f = open('dictionary_test.txt', 'w')
 for m in matrix:
