@@ -40,7 +40,17 @@ tf_idf = idfModel.transform(featured)
 normalizer = Normalizer(inputCol = 'idf', outputCol = 'idf_norm', p = 2.0)
 normData = normalizer.transform(tf_idf)
 
+'''
+def dot(x,y):
+	score = 0.0
+	for key in x:
+		if key in y:
+			score += x[key]*y[key]
+	return score
+'''
 
-for Normdata in normData.select('no','idf_norm').take(10):
-	print Normdata
+
+cartesian = normData.select('no','idf_norm').rdd.cartesian(normData.select('no','idf_norm').rdd).map(lambda (x,y) :(x.idf_norm.dot(y.idf_norm),(x.no,y.no))).sortByKey().take(100)
+for a in cartesian:
+	print a
 
