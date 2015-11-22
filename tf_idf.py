@@ -34,7 +34,7 @@ documents = sqlContext.createDataFrame(sc.pickleFile('merged_file/part-00000').m
 #users = sqlContext.createDataFrame(sc.pickleFile('merged_file').map(lambda x : (x['mb_no'],x['lec_code'][:4])),['user','department']).orderBy('department')
 #for u in users.select('department','user').take(10000):
 #	print u
-
+'''
 professors = documents.select('prof_name').distinct()
 department = documents.select('department').distinct()
 #grade	1/2/3/4
@@ -43,6 +43,9 @@ eval_total = documents.select('eval_total').distinct() # 1/2/3/4/5
 for e in eval_total.collect():
 	print e
 '''
+
+
+
 htf = HashingTF(inputCol= 'words',outputCol = 'rawFeatures')
 featured = htf.transform(documents)
 idf = IDF(inputCol = 'rawFeatures',outputCol = 'idf')
@@ -50,19 +53,6 @@ idfModel = idf.fit(featured)
 tf_idf = idfModel.transform(featured)
 normalizer = Normalizer(inputCol = 'idf', outputCol = 'idf_norm', p = 2.0)
 normData = normalizer.transform(tf_idf)
-'''
 
-'''
-def dot(x,y):
-	score = 0.0
-	for key in x:
-		if key in y:
-			score += x[key]*y[key]
-	return score
-'''
+normData.rdd.saveAsPickleFile('idf_normalized')
 
-'''
-cartesian = normData.select('no','idf_norm').rdd.cartesian(normData.select('no','idf_norm').rdd).map(lambda (x,y) :(x.idf_norm.dot(y.idf_norm),(x.no,y.no))).sortByKey().take(100)
-for a in cartesian:
-	print a
-'''

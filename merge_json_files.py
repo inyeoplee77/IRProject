@@ -23,9 +23,9 @@ for f in read_files:
 		continue
 	for e in eva:
 		e[u'eval_id'] = unicode(num)
-		e[u'lec_name'] = unicode(info[0].encode('utf-8'))
-		e[u'professor'] = unicode(info[1].encode('utf-8'))
-		e[u'lec_code'] = unicode(info[2].encode('utf-8'))
+		e[u'lec_name'] = unicode(info[0].strip().encode('utf-8'))
+		e[u'professor'] = unicode(info[1].strip().encode('utf-8'))
+		e[u'lec_code'] = unicode(info[2].strip().encode('utf-8'))
 		data.append(e)
 	#eva.append({'lec_name':info[0],'professor':info[1],'lec_code':info[2]})
 	#data.append(eva)
